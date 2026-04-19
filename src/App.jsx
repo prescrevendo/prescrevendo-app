@@ -88,7 +88,7 @@ function Header({ titulo }) {
       display: "flex", alignItems: "center", gap: 10,
       position: "sticky", top: 0, zIndex: 100,
     }}>
-      <span style={{ fontSize: 20 }}>💊</span>
+      <img src="/icon-192.png" alt="Logo" style={{ width: 30, height: 30, borderRadius: 7, objectFit: "contain", background: "#fff" }} />
       <span style={{ color: "#fff", fontWeight: 700, fontSize: 16, letterSpacing: "-0.2px" }}>
         {titulo}
       </span>

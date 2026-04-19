@@ -44,7 +44,7 @@ function BottomNav({ ativa, onChange }) {
       position: "fixed", bottom: 0, left: 0, right: 0,
       background: "#fff", borderTop: "1px solid #e8e8e8",
       display: "flex", zIndex: 200,
-      paddingBottom: "env(safe-area-inset-bottom, 0px)",
+      paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
     }}>
       {NAV.map(item => {
         const isAtiva = ativa === item.id;

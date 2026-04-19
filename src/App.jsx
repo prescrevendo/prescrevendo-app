@@ -44,7 +44,7 @@ function BottomNav({ ativa, onChange }) {
       position: "fixed", bottom: 0, left: 0, right: 0,
       background: "#fff", borderTop: "1px solid #e8e8e8",
       display: "flex", zIndex: 200,
-      paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
+      paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 18px)",
     }}>
       {NAV.map(item => {
         const isAtiva = ativa === item.id;
@@ -289,6 +289,7 @@ function TelaHome({ onNavegarSecao }) {
               {/* Prescrições — ativo via nav */}
               <div
                 onClick={() => onNavegarSecao("prescricoes")}
+              
                 style={{
                   background: "#fff", borderRadius: 16,
                   padding: "20px 14px", textAlign: "center",
@@ -465,6 +466,61 @@ function TelaEmBreve({ titulo, icon }) {
 }
 
 // ── App ───────────────────────────────────────────────────────────────────────
+
+function TelaPrescrições({ onBack }) {
+  const [sistema, setSistema] = useState(null);
+
+  const SISTEMAS = [("🚨", "Admitindo Paciente Grave", "#fde8e8"), ("❤️", "Cardiologia", "#fde8e8"), ("🩺", "Endocrinologia", "#fef3e2"), ("🫄", "Gastroenterologia / Hepatologia", "#e8f4ef"), ("🩸", "Hematologia", "#fde8e8"), ("💧", "Nefrologia", "#e8f0fd"), ("🧠", "Neurologia", "#f0e8fd"), ("🎗️", "Oncologia", "#fde8f4"), ("🫁", "Pneumologia", "#e8f0fd"), ("🦴", "Reumatologia", "#fef3e2"), ("⚠️", "Causas Externas", "#fde8e8"), ("🏥", "Paciente Crítico", "#e8f4ef"), ("⭐", "Bônus", "#fef3e2")];
+
+  if (sistema) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#f4f6f8", fontFamily: "system-ui, sans-serif" }}>
+        <Header titulo={sistema[1]} onBack={() => setSistema(null)} />
+        <div style={{ padding: "16px" }}>
+          <div style={{
+            background: "#fff", borderRadius: 12, border: "1.5px solid #eee",
+            padding: "24px", textAlign: "center"
+          }}>
+            <p style={{ fontSize: 32, marginBottom: 12 }}>{sistema[0]}</p>
+            <p style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a", marginBottom: 8 }}>{sistema[1]}</p>
+            <p style={{ fontSize: 13, color: "#888" }}>Conteúdo em breve</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#f4f6f8", fontFamily: "system-ui, sans-serif" }}>
+      <Header titulo="Prescrições" onBack={onBack} />
+      <div style={{ padding: "16px" }}>
+        {SISTEMAS.map(([icon, nome, cor]) => (
+          <div
+            key={nome}
+            onClick={() => setSistema([icon, nome, cor])}
+            style={{
+              background: "#fff", borderRadius: 12, padding: "12px 14px",
+              marginBottom: 8, display: "flex", alignItems: "center", gap: 12,
+              border: "1.5px solid #eee", cursor: "pointer",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.04)"
+            }}
+            onTouchStart={e => { e.currentTarget.style.background = "#f5f5f5"; }}
+            onTouchEnd={e => { e.currentTarget.style.background = "#fff"; }}
+          >
+            <div style={{
+              width: 38, height: 38, borderRadius: 10, background: cor,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 20, flexShrink: 0
+            }}>{icon}</div>
+            <span style={{ fontSize: 14, fontWeight: 600, color: "#1a1a1a", flex: 1 }}>{nome}</span>
+            <span style={{ color: "#0d5c4a", fontSize: 18 }}>›</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [aba, setAba] = useState("home");
 

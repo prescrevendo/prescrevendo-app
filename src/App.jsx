@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 
-// ATENÇÃO: No seu GitHub, retire os comentários (//) da linha abaixo para importar o seu ficheiro real!
-// import PrescriçõesCardiologia from "./telas/prescricoes/PrescriçõesCardiologia";
+import PrescriçõesCardiologia from "./telas/prescricoes/PrescriçõesCardiologia";
 
 const COR = {
   primary:  "#0d5c4a",

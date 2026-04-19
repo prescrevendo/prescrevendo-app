@@ -527,7 +527,7 @@ export default function App() {
   const renderTela = () => {
     if (aba === "home")       return <TelaHome onNavegarSecao={setAba} />;
     if (aba === "bulas")      return <TelaBulas />;
-    if (aba === "prescricoes") return <TelaEmBreve titulo="Prescrições Modelo" icon="📝" />;
+    if (aba === "prescricoes") return <TelaPrescrições onBack={() => setAba("home")} />;
     if (aba === "favoritos")  return <TelaEmBreve titulo="Favoritos" icon="⭐" />;
     return <TelaHome />;
   };

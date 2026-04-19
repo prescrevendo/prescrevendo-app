@@ -1,66 +1,66 @@
 import React, { useState, useMemo } from "react";
-import { ChevronRight, Search, X, Home, FileText, Pill, Star, ClipboardList } from "lucide-react";
+import { ChevronRight, Search, X, Home, FileText, Pill, Star, ClipboardList, ArrowLeft } from "lucide-react";
 
-// --- Configurações de Cores ---
-const COR = {
-  primary: "#0d5c4a",      // Verde escuro principal
-  primaryLight: "#e8f4ef", // Fundo verde claro
-  text: "#1a1a1a",
-  muted: "#666",
-  border: "#eee",
-  bg: "#f4f6f8",
-  white: "#ffffff"
+// --- Constantes de Design ---
+const CORES_APP = {
+  primaria: "#0d5c4a",      // Verde escuro Prescrevendo
+  fundo: "#f4f6f8",         // Cinza azulado claro
+  texto: "#1a1a1a",
+  cartao: "#ffffff",
+  borda: "#eeeeee",
+  muted: "#94a3b8"
 };
 
-// --- Base de Dados de Medicamentos ---
-const MEDICAMENTOS = [{"slug":"cisatracúrio","nome":"CISATRACÚRIO","nome_comercial_apresentacao":"Nimbium injetável - 2mg/mL (frascos de 20mg/10mL e 10mg/5mL)","classe_terapeutica":"Bloqueador neuromuscular não despolarizante","indicacao":"​Bloqueador neuromuscular não-despolarizante de duração intermediária utilizado durante procedimentos cirúrgicos ou em terapia intensiva para facilitar a intubação orotraqueal.","dose":"​Adulto: 0,15mg/kg indução; 0,03mg/kg manutenção.","via_de_administracao":"​EV","preparo_diluicao":"​Diluído em SF ou SG 5%.","administracao":"Infusão inicial de 3mcg/kg/min.","cuidados_especificos_monitoramento":"Monitorar função neuromuscular.","status":"ok"},{"slug":"ceftazidima","nome":"CEFTAZIDIMA","nome_comercial_apresentacao":"Kefadim injetável - 1g/frasco​","classe_terapeutica":"Antimicrobiano, Cefalosporina terceira geração","indicacao":"​Tratamento de infecção provocada por Pseudomonas aeruginosa.","dose":"​Adulto: EV 1-2g a cada 8 horas.","via_de_administracao":"​EV e IM","preparo_diluicao":"​Reconstituição EV: 10mL de AD. Diluição: 10-50mL de SF ou SG 5%.","administracao":"Direta: 3-5 minutos. Diluído: 15-30 minutos.","cuidados_especificos_monitoramento":"Ajuste necessário para insuficiência renal.","status":"ok"},{"slug":"amiodarona-injetavel","nome":"AMIODARONA (INJETÁVEL)","nome_comercial_apresentacao":"AmioDARONA 50mg/mL (ampola 3mL) injetável​","classe_terapeutica":"Antiarrítmico","indicacao":"Distúrbios graves do ritmo cardíaco.","dose":"Ataque: 5mg/kg em 5 a 20 minutos.","via_de_administracao":"Endovenosa","preparo_diluicao":"Diluir exclusivamente em SG 5%.","administracao":"Usar preferencialmente cateter venoso central e filtro de linha.","cuidados_especificos_monitoramento":"Monitoração contínua de ECG e PA. Contraindicado na gravidez.","status":"ok"}];
-
-const CAMPOS_DETALHE = [
-  { key: "nome_comercial_apresentacao", label: "Apresentação", icon: "💊" },
-  { key: "classe_terapeutica", label: "Classe Terapêutica", icon: "🏷" },
-  { key: "indicacao", label: "Indicação", icon: "📋" },
-  { key: "dose", label: "Dose", icon: "⚖️" },
-  { key: "via_de_administracao", label: "Via de Administração", icon: "💉" },
-  { key: "preparo_diluicao", label: "Preparo / Diluição", icon: "🧪" },
-  { key: "administracao", label: "Administração", icon: "⏱" },
-  { key: "cuidados_especificos_monitoramento", label: "Cuidados e Monitoramento", icon: "⚠️" },
+// --- Base de Dados (Amostra - Adicione os outros medicamentos aqui seguindo este padrão) ---
+const LISTA_MEDICAMENTOS = [
+  {"slug":"cisatracúrio","nome":"CISATRACÚRIO","nome_comercial_apresentacao":"Nimbium injetável - 2mg/mL","classe_terapeutica":"Bloqueador neuromuscular","indicacao":"Facilitar a intubação orotraqueal.","dose":"Adulto: 0,15mg/kg.","via_de_administracao":"EV","preparo_diluicao":"Diluído em SF ou SG 5%.","administracao":"Infusão inicial de 3mcg/kg/min.","cuidados_especificos_monitoramento":"Monitorar função neuromuscular.","status":"ok"},
+  {"slug":"ceftazidima","nome":"CEFTAZIDIMA","nome_comercial_apresentacao":"Kefadim injetável - 1g/frasco","classe_terapeutica":"Antimicrobiano","indicacao":"Infecções por Pseudomonas.","dose":"Adulto: 1-2g a cada 8 horas.","via_de_administracao":"EV e IM","preparo_diluicao":"Reconstituição: 10mL de AD.","administracao":"Direta: 3-5 minutos.","cuidados_especificos_monitoramento":"Ajustar em insuficiência renal.","status":"ok"},
+  {"slug":"amiodarona-injetavel","nome":"AMIODARONA (INJETÁVEL)","nome_comercial_apresentacao":"AmioDARONA 50mg/mL","classe_terapeutica":"Antiarrítmico","indicacao":"Distúrbios graves do ritmo cardíaco.","dose":"Ataque: 5mg/kg em 20 min.","via_de_administracao":"Endovenosa","preparo_diluicao":"Diluir em SG 5%.","administracao":"Usar bomba de infusão.","cuidados_especificos_monitoramento":"Monitoração de ECG e PA.","status":"ok"}
 ];
 
-// Lista de especialidades com objetos literais para evitar erros de desestruturação
-const LISTA_SISTEMAS = [
-  { id: 1, icon: "🚨", nome: "Admitindo Paciente Grave", cor: "#fde8e8" },
-  { id: 2, icon: "❤️", nome: "Cardiologia", cor: "#fde8e8" },
-  { id: 3, icon: "🩺", nome: "Endocrinologia", cor: "#fef3e2" },
-  { id: 4, icon: "🫄", nome: "Gastroenterologia / Hepatologia", cor: "#e8f4ef" },
-  { id: 5, icon: "🩸", nome: "Hematologia", cor: "#fde8e8" },
-  { id: 6, icon: "💧", nome: "Nefrologia", cor: "#e8f0fd" },
-  { id: 7, icon: "🧠", nome: "Neurologia", cor: "#f0e8fd" },
-  { id: 8, icon: "🎗️", nome: "Oncologia", cor: "#fde8f4" },
-  { id: 9, icon: "🫁", nome: "Pneumologia", cor: "#e8f0fd" },
-  { id: 10, icon: "🦴", nome: "Reumatologia", cor: "#fef3e2" },
-  { id: 11, icon: "🏥", nome: "Paciente Crítico", cor: "#e8f4ef" }
+// --- Dados das Especialidades (TELA DE PRESCRIÇÕES) ---
+// Note que usamos Objetos { icon, nome, cor } e NÃO tuplas (...) para evitar o erro visual
+const CATEGORIAS_PRESCRIÇÃO = [
+  { id: "p1", icon: "🚨", nome: "Admitindo Paciente Grave", cor: "#fde8e8" },
+  { id: "p2", icon: "❤️", nome: "Cardiologia", cor: "#fde8e8" },
+  { id: "p3", icon: "🩺", nome: "Endocrinologia", cor: "#fef3e2" },
+  { id: "p4", icon: "🫄", nome: "Gastroenterologia / Hepatologia", cor: "#e8f4ef" },
+  { id: "p5", icon: "🩸", nome: "Hematologia", cor: "#fde8e8" },
+  { id: "p6", icon: "💧", nome: "Nefrologia", cor: "#e8f0fd" },
+  { id: "p7", icon: "🧠", nome: "Neurologia", cor: "#f0e8fd" },
+  { id: "p8", icon: "🎗️", nome: "Oncologia", cor: "#fde8f4" },
+  { id: "p9", icon: "🫁", nome: "Pneumologia", cor: "#e8f0fd" },
+  { id: "p10", icon: "🦴", nome: "Reumatologia", cor: "#fef3e2" },
+  { id: "p11", icon: "🏥", nome: "Paciente Crítico", cor: "#e8f4ef" }
 ];
 
-// --- Componentes ---
+// --- Sub-componentes ---
 
-function Header({ titulo }) {
+function BarraSuperior({ titulo, showBack, onBack }) {
   return (
     <div style={{
-      position: "sticky", top: 0, zIndex: 50, display: "flex", alignItems: "center",
-      height: 56, padding: "0 16px", gap: 12, background: COR.primary, boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+      position: "sticky", top: 0, zIndex: 100, display: "flex", alignItems: "center",
+      height: 60, padding: "0 16px", gap: 12, background: CORES_APP.primaria, 
+      boxShadow: "0 2px 10px rgba(0,0,0,0.2)"
     }}>
-      <div style={{
-        width: 32, height: 32, background: "#fff", borderRadius: 8,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontWeight: "bold", color: COR.primary, fontSize: 18
-      }}>P</div>
-      <h1 style={{ color: "#fff", fontWeight: "bold", fontSize: 17, margin: 0 }}>{titulo}</h1>
+      {showBack ? (
+        <button onClick={onBack} style={{ background: "none", border: "none", color: "#fff", padding: 0 }}>
+          <ArrowLeft size={24} />
+        </button>
+      ) : (
+        <div style={{
+          width: 32, height: 32, background: "#fff", borderRadius: 8,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontWeight: "900", color: CORES_APP.primaria, fontSize: 18
+        }}>P</div>
+      )}
+      <h1 style={{ color: "#fff", fontWeight: "700", fontSize: 18, margin: 0 }}>{titulo}</h1>
     </div>
   );
 }
 
-function BottomNav({ ativa, onChange }) {
-  const itens = [
+function NavegacaoInferior({ abaAtiva, setAba }) {
+  const botoes = [
     { id: "home", label: "Início", icon: <Home size={22} /> },
     { id: "prescricoes", label: "Prescrições", icon: <FileText size={22} /> },
     { id: "bulas", label: "Bulas", icon: <Pill size={22} /> },
@@ -71,164 +71,134 @@ function BottomNav({ ativa, onChange }) {
     <div style={{
       position: "fixed", bottom: 0, left: 0, right: 0, background: "#fff",
       borderTop: "1px solid #eee", display: "flex", justifyContent: "space-around",
-      alignItems: "center", paddingBottom: "env(safe-area-inset-bottom, 16px)",
-      paddingTop: 8, zIndex: 100, boxShadow: "0 -2px 10px rgba(0,0,0,0.05)"
+      paddingBottom: "max(12px, env(safe-area-inset-bottom))", paddingTop: 10, zIndex: 100,
+      boxShadow: "0 -2px 15px rgba(0,0,0,0.05)"
     }}>
-      {itens.map(item => {
-        const isAtiva = ativa === item.id;
-        return (
-          <button
-            key={item.id}
-            onClick={() => onChange(item.id)}
-            style={{
-              background: "none", border: "none", display: "flex", flexDirection: "column",
-              alignItems: "center", gap: 4, padding: "8px 12px", cursor: "pointer",
-              color: isAtiva ? COR.primary : "#aaa", position: "relative"
-            }}
-          >
-            {item.icon}
-            <span style={{ fontSize: 10, fontWeight: "bold" }}>{item.label}</span>
-            {isAtiva && <div style={{
-              position: "absolute", bottom: -2, width: 24, height: 3,
-              background: COR.primary, borderRadius: 2
-            }} />}
-          </button>
-        );
-      })}
+      {botoes.map(btn => (
+        <button
+          key={btn.id}
+          onClick={() => setAba(btn.id)}
+          style={{
+            background: "none", border: "none", display: "flex", flexDirection: "column",
+            alignItems: "center", gap: 4, padding: "4px 10px", cursor: "pointer",
+            color: abaAtiva === btn.id ? CORES_APP.primaria : "#cbd5e1",
+            transition: "all 0.2s"
+          }}
+        >
+          {btn.icon}
+          <span style={{ fontSize: 10, fontWeight: "800", textTransform: "uppercase" }}>{btn.label}</span>
+          {abaAtiva === btn.id && (
+            <div style={{ width: 15, height: 3, background: CORES_APP.primaria, borderRadius: 2, marginTop: 2 }} />
+          )}
+        </button>
+      ))}
     </div>
   );
 }
 
-function FichaModal({ med, onClose }) {
-  if (!med) return null;
-  return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "flex-end", background: "rgba(0,0,0,0.5)" }} onClick={onClose}>
-      <div style={{ width: "100%", maxHeight: "90vh", background: "#fff", borderRadius: "32px 32px 0 0", overflowY: "auto" }} onClick={e => e.stopPropagation()}>
-        <div style={{ display: "flex", justifyContent: "center", padding: "16px 0" }}>
-          <div style={{ width: 48, height: 5, background: "#eee", borderRadius: 10 }} />
-        </div>
-        <div style={{ padding: "0 24px 20px", borderBottom: "1px solid #f0f0f0", position: "sticky", top: 0, background: "#fff", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <h2 style={{ fontSize: 18, fontWeight: "bold", color: COR.primary, margin: 0 }}>{med.nome}</h2>
-            <span style={{ fontSize: 11, background: COR.primaryLight, color: COR.primary, padding: "3px 10px", borderRadius: 20, fontWeight: "bold", marginTop: 4, display: "inline-block" }}>
-              {med.classe_terapeutica}
-            </span>
-          </div>
-          <button onClick={onClose} style={{ border: "none", background: "#f5f5f5", width: 32, height: 32, borderRadius: "50%", color: "#666", fontSize: 18, cursor: "pointer" }}>×</button>
-        </div>
-        <div style={{ padding: 20, paddingBottom: 100 }}>
-          {CAMPOS_DETALHE.map(campo => med[campo.key] && (
-            <div key={campo.key} style={{ marginBottom: 20 }}>
-              <h4 style={{ fontSize: 10, fontWeight: "bold", color: COR.primary, textTransform: "uppercase", letterSpacing: 1, marginBottom: 6, display: "flex", alignItems: "center", gap: 6 }}>
-                <span>{campo.icon}</span> {campo.label}
-              </h4>
-              <div style={{ padding: 14, background: "#f9fafb", borderRadius: 14, border: "1px solid #f0f0f0", fontSize: 13, lineHeight: 1.6, color: "#333", whiteSpace: "pre-wrap" }}>
-                {med[campo.key]}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+// --- Telas Principais ---
 
-// --- Telas ---
-
-function TelaHome({ onNavegar }) {
-  const [busca, setBusca] = useState("");
-  const [medSelecionado, setMedSelecionado] = useState(null);
-
-  const resultados = useMemo(() => {
-    const q = busca.toLowerCase().trim();
-    if (!q) return [];
-    return MEDICAMENTOS.filter(m => m.nome.toLowerCase().includes(q)).slice(0, 5);
-  }, [busca]);
+function HomePrincipal({ navegar }) {
+  const [term, setTerm] = useState("");
+  const filtered = useMemo(() => {
+    if (!term) return [];
+    return LISTA_MEDICAMENTOS.filter(m => m.nome.toLowerCase().includes(term.toLowerCase())).slice(0, 5);
+  }, [term]);
 
   return (
-    <div style={{ minHeight: "100vh", background: COR.bg }}>
-      <Header titulo="Prescrevendo" />
+    <div style={{ paddingBottom: 100 }}>
+      <BarraSuperior titulo="Prescrevendo" />
       <div style={{ padding: 20 }}>
+        {/* Busca */}
         <div style={{ position: "relative", marginBottom: 24 }}>
-          <Search style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "#aaa" }} size={18} />
+          <Search style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: CORES_APP.muted }} size={20} />
           <input
             type="text"
-            style={{ width: "100%", background: "#fff", border: "1px solid #ddd", borderRadius: 14, padding: "14px 16px 14px 44px", fontSize: 14, outline: "none", boxSizing: "border-box" }}
             placeholder="Pesquisar medicamento..."
-            value={busca}
-            onChange={e => setBusca(e.target.value)}
+            value={term}
+            onChange={(e) => setTerm(e.target.value)}
+            style={{
+              width: "100%", padding: "16px 16px 16px 48px", borderRadius: 16, border: "1.5px solid #e2e8f0",
+              fontSize: 16, outline: "none", boxSizing: "border-box", background: "#fff"
+            }}
           />
-          {busca && <button onClick={() => setBusca("")} style={{ position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)", border: "none", background: "none", color: "#aaa" }}><X size={18}/></button>}
+          {term && <X style={{ position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)", color: CORES_APP.muted }} onClick={() => setTerm("")} />}
         </div>
 
-        {busca && resultados.length > 0 && (
-          <div style={{ background: "#fff", borderRadius: 14, border: "1px solid #eee", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", overflow: "hidden", marginBottom: 24 }}>
-            {resultados.map((m, i) => (
-              <div 
-                key={m.slug} 
-                onClick={() => setMedSelecionado(m)} 
-                style={{ padding: 16, display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: i !== resultados.length - 1 ? "1px solid #f5f5f5" : "none", cursor: "pointer" }}
-              >
-                <div>
-                  <p style={{ fontWeight: "bold", fontSize: 14, margin: 0 }}>{m.nome}</p>
-                  <p style={{ fontSize: 10, color: "#999", textTransform: "uppercase", marginTop: 2 }}>{m.classe_terapeutica}</p>
-                </div>
-                <ChevronRight size={18} color={COR.primary} />
+        {/* Resultados Rápidos */}
+        {term && (
+          <div style={{ background: "#fff", borderRadius: 16, border: "1px solid #eee", overflow: "hidden", marginBottom: 20, boxShadow: "0 10px 20px rgba(0,0,0,0.05)" }}>
+            {filtered.map(med => (
+              <div key={med.slug} style={{ padding: 16, borderBottom: "1px solid #f8fafc", display: "flex", justifyContent: "space-between" }}>
+                <span style={{ fontWeight: "700" }}>{med.nome}</span>
+                <ChevronRight size={18} color={CORES_APP.primaria} />
               </div>
             ))}
           </div>
         )}
 
-        <h3 style={{ fontSize: 11, fontWeight: "bold", color: "#999", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Ferramentas Rápidas</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-          <button onClick={() => onNavegar("prescricoes")} style={{ background: "#fff", border: "1px solid #eee", padding: "20px 10px", borderRadius: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, cursor: "pointer" }}>
-            <div style={{ width: 48, height: 48, background: "#fff8e8", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>📝</div>
-            <span style={{ fontSize: 12, fontWeight: "bold", color: "#444" }}>Prescrições</span>
+        {/* Menu Grid */}
+        <h3 style={{ fontSize: 12, fontWeight: "900", color: CORES_APP.muted, textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 16 }}>Ferramentas</h3>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <button onClick={() => navegar("prescricoes")} style={{ background: "#fff", border: "1px solid #f1f5f9", padding: "24px 12px", borderRadius: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 60, height: 60, background: "#fff8e8", borderRadius: 20, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>📝</div>
+            <span style={{ fontSize: 13, fontWeight: "800", color: "#334155" }}>Prescrições</span>
           </button>
-          <button onClick={() => onNavegar("bulas")} style={{ background: "#fff", border: "1px solid #eee", padding: "20px 10px", borderRadius: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, cursor: "pointer" }}>
-            <div style={{ width: 48, height: 48, background: "#e8f4ef", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>💊</div>
-            <span style={{ fontSize: 12, fontWeight: "bold", color: "#444" }}>Bulário</span>
+          <button onClick={() => navegar("bulas")} style={{ background: "#fff", border: "1px solid #f1f5f9", padding: "24px 12px", borderRadius: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 60, height: 60, background: "#e8f4ef", borderRadius: 20, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>💊</div>
+            <span style={{ fontSize: 13, fontWeight: "800", color: "#334155" }}>Bulário</span>
           </button>
         </div>
       </div>
-      <FichaModal med={medSelecionado} onClose={() => setMedSelecionado(null)} />
     </div>
   );
 }
 
 function TelaPrescricoes() {
   return (
-    <div style={{ minHeight: "100vh", background: COR.bg, paddingBottom: 100 }}>
-      <Header titulo="Prescrições" />
+    <div style={{ minHeight: "100vh", background: CORES_APP.fundo, paddingBottom: 110 }}>
+      <BarraSuperior titulo="Prescrições" />
       <div style={{ padding: "16px" }}>
-        {LISTA_SISTEMAS.map((item) => (
+        {CATEGORIAS_PRESCRIÇÃO.map((item) => (
           <div
             key={item.id}
             style={{
-              background: "#fff", border: "1px solid #eee", borderRadius: 20,
-              padding: "12px", display: "flex", alignItems: "center", gap: "16px",
-              marginBottom: "10px", boxShadow: "0 2px 4px rgba(0,0,0,0.02)",
+              background: "#fff", 
+              border: "1px solid #f1f5f9", 
+              borderRadius: 22,
+              padding: "12px", 
+              display: "flex", 
+              alignItems: "center", 
+              gap: "16px",
+              marginBottom: "12px", 
+              boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
               cursor: "pointer"
             }}
           >
-            {/* Box do Ícone com cor de fundo real */}
+            {/* Box do Ícone com cor de fundo real - FIX DEFINITIVO AQUI */}
             <div style={{
-              width: 56, height: 56, borderRadius: 16, backgroundColor: item.cor,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 24, flexShrink: 0
+              width: 58, 
+              height: 58, 
+              borderRadius: 18, 
+              backgroundColor: item.cor, // Cor de fundo vinda do objeto CATEGORIAS_PRESCRIÇÃO
+              display: "flex", 
+              alignItems: "center", 
+              justifyContent: "center",
+              fontSize: 26, 
+              flexShrink: 0
             }}>
               {item.icon}
             </div>
             
             {/* Nome da Especialidade */}
             <div style={{ flex: 1 }}>
-              <span style={{ fontSize: 15, fontWeight: "bold", color: "#1a1a1a", lineHeight: 1.2 }}>
+              <span style={{ fontSize: 15, fontWeight: "700", color: "#1e293b" }}>
                 {item.nome}
               </span>
             </div>
 
-            {/* Seta lateral */}
-            <ChevronRight size={18} color="#ccc" style={{ marginRight: 4 }} />
+            {/* Seta lateral à direita */}
+            <ChevronRight size={18} color="#cbd5e1" style={{ marginRight: 8 }} />
           </div>
         ))}
       </div>
@@ -236,46 +206,47 @@ function TelaPrescricoes() {
   );
 }
 
-function TelaBulas() {
-  return (
-    <div style={{ minHeight: "100vh", background: COR.bg }}>
-      <Header titulo="Bulário" />
-      <div style={{ padding: 40, textAlign: "center", color: "#999" }}>
-        <Pill size={48} style={{ opacity: 0.1, marginBottom: 16 }} />
-        <p style={{ fontSize: 14, fontWeight: "bold" }}>A carregar base de dados...</p>
-      </div>
-    </div>
-  );
-}
-
-// --- Componente Principal ---
+// --- Componente Raiz ---
 
 export default function App() {
-  const [aba, setAba] = useState("home");
+  const [paginaAtiva, setPaginaAtiva] = useState("home");
 
-  const renderPagina = () => {
-    switch (aba) {
-      case "home": return <TelaHome onNavegar={setAba} />;
+  const renderContent = () => {
+    switch (paginaAtiva) {
+      case "home": return <HomePrincipal navegar={setPaginaAtiva} />;
       case "prescricoes": return <TelaPrescricoes />;
-      case "bulas": return <TelaBulas />;
-      case "favoritos": 
+      case "bulas": 
         return (
-          <div style={{ minHeight: "100vh", background: COR.bg }}>
-            <Header titulo="Favoritos" />
-            <div style={{ padding: 60, textAlign: "center", color: "#ccc" }}>
-              <Star size={40} style={{ opacity: 0.2, marginBottom: 12 }} />
-              <p style={{ fontSize: 13, fontWeight: "bold" }}>Ainda sem favoritos</p>
+          <div style={{ paddingBottom: 100 }}>
+            <BarraSuperior titulo="Bulário" />
+            <div style={{ padding: 40, textAlign: "center", color: CORES_APP.muted }}>
+              <Pill size={48} style={{ opacity: 0.2, marginBottom: 16 }} />
+              <p>Bulário completo em breve.</p>
             </div>
           </div>
         );
-      default: return <TelaHome onNavegar={setAba} />;
+      case "favoritos":
+        return (
+          <div style={{ paddingBottom: 100 }}>
+            <BarraSuperior titulo="Favoritos" />
+            <div style={{ padding: 80, textAlign: "center", color: CORES_APP.muted }}>
+              <Star size={48} style={{ opacity: 0.1, marginBottom: 16 }} />
+              <p>Nenhum item salvo.</p>
+            </div>
+          </div>
+        );
+      default: return <HomePrincipal navegar={setPaginaAtiva} />;
     }
   };
 
   return (
-    <div style={{ maxWidth: 480, margin: "0 auto", position: "relative", minHeight: "100vh", overflowX: "hidden", background: "#fff", fontFamily: "system-ui, sans-serif" }}>
-      {renderPagina()}
-      <BottomNav ativa={aba} onChange={setAba} />
+    <div style={{ 
+      maxWidth: 480, margin: "0 auto", minHeight: "100vh", position: "relative",
+      background: "#fff", fontFamily: "system-ui, -apple-system, sans-serif",
+      overflowX: "hidden", boxShadow: "0 0 40px rgba(0,0,0,0.1)"
+    }}>
+      {renderContent()}
+      <NavegacaoInferior abaAtiva={paginaAtiva} setAba={setPaginaAtiva} />
     </div>
   );
 }

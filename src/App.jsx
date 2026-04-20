@@ -1,6 +1,11 @@
 import { useState, useMemo } from "react";
 
 import PrescricoesCardiologia from "./telas/prescricoes/PrescricoesCardiologia";
+import PrescricoesEndocrinologia from "./telas/prescricoes/PrescricoesEndocrinologia";
+import PrescricoesGastroenterologia from "./telas/prescricoes/PrescricoesGastroenterologiaHepatologia";
+import PrescricoesHematologia from "./telas/prescricoes/PrescricoesHematologia";
+import PrescricoesNefrologia from "./telas/prescricoes/PrescricoesNefrologia";
+import PrescricoesNeurologia from "./telas/prescricoes/PrescricoesNeurologia";
 
 
 const COR = {
@@ -432,7 +437,7 @@ function TelaBulas() {
   );
 }
 
-// ── Tela: Prescrições (ESTÉTICA CORRIGIDA + NAVEGAÇÃO P/ CARDIOLOGIA) ─────────
+// ── Tela: Prescrições ─────────────────────────────────────────────────────────
 function TelaPrescrições({ onBack }) {
   const [sistema, setSistema] = useState(null);
 
@@ -452,26 +457,30 @@ function TelaPrescrições({ onBack }) {
     ["⭐", "Bônus", "#fef3e2"]
   ];
 
-  if (sistema) {
-    // --- ADICIONADA A CONDIÇÃO QUE FALTAVA ---
-    if (sistema[1] === "Cardiologia") {
-      return <PrescricoesCardiologia onBack={() => setSistema(null)} />;
-    }
+if (sistema) {
+    // Redirecionamento automático para as telas de cada especialidade
+    if (sistema.nome === "Cardiologia") return <PrescricoesCardiologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Endocrinologia") return <PrescricoesEndocrinologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Gastroenterologia / Hepatologia") return <PrescricoesGastroenterologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Hematologia") return <PrescricoesHematologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Nefrologia") return <PrescricoesNefrologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Neurologia") return <PrescricoesNeurologia onBack={() => setSistema(null)} />;
 
+    // Caso o utilizador clique num tema que ainda não tem página (ex: Oncologia)
     return (
       <div style={{ minHeight: "100vh", background: "#f4f6f8", fontFamily: "system-ui, sans-serif" }}>
-        <Header titulo={sistema[1]} onBack={() => setSistema(null)} />
+        <Header titulo={sistema.nome} onBack={() => setSistema(null)} />
         <div style={{ padding: "16px" }}>
           <div style={{
             background: "#fff", borderRadius: 16, border: "1px solid #f1f5f9",
             padding: "40px 24px", textAlign: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.02)"
           }}>
             <div style={{
-              width: 72, height: 72, background: sistema[2], borderRadius: 20,
+              width: 72, height: 72, background: sistema.cor, borderRadius: 20,
               display: "flex", alignItems: "center", justifyContent: "center",
               fontSize: 36, margin: "0 auto 20px"
-            }}>{sistema[0]}</div>
-            <p style={{ fontSize: 18, fontWeight: 700, color: "#1a1a1a", marginBottom: 8 }}>{sistema[1]}</p>
+            }}>{sistema.icon}</div>
+            <p style={{ fontSize: 18, fontWeight: 700, color: "#1a1a1a", marginBottom: 8 }}>{sistema.nome}</p>
             <p style={{ fontSize: 13, color: "#888", margin: 0 }}>O conteúdo desta especialidade estará disponível em breve.</p>
             <button 
               onClick={() => setSistema(null)} 
@@ -487,10 +496,10 @@ function TelaPrescrições({ onBack }) {
     <div style={{ minHeight: "100vh", background: "#f4f6f8", fontFamily: "system-ui, sans-serif", paddingBottom: 80 }}>
       <Header titulo="Prescrições" onBack={onBack} />
       <div style={{ padding: "16px" }}>
-        {SISTEMAS_DATA.map(([icon, nome, cor]) => (
+        {SISTEMAS_DATA.map((item) => (
           <div
-            key={nome}
-            onClick={() => setSistema([icon, nome, cor])}
+            key={item.id}
+            onClick={() => setSistema(item)}
             style={{
               background: "#ffffff", borderRadius: "16px", padding: "12px",
               marginBottom: "12px", display: "flex", alignItems: "center", gap: "16px",
@@ -498,14 +507,13 @@ function TelaPrescrições({ onBack }) {
               boxShadow: "0 2px 4px rgba(0,0,0,0.02)"
             }}
           >
-            {/* Box do Ícone com cor de fundo suave */}
             <div style={{
-              width: 56, height: 56, borderRadius: 14, backgroundColor: cor,
+              width: 56, height: 56, borderRadius: 14, backgroundColor: item.cor,
               display: "flex", alignItems: "center", justifyContent: "center",
               fontSize: 26, flexShrink: 0
-            }}>{icon}</div>
+            }}>{item.icon}</div>
             
-            <span style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a", flex: 1, lineHeight: "1.2" }}>{nome}</span>
+            <span style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a", flex: 1, lineHeight: "1.2" }}>{item.nome}</span>
             <span style={{ display: "flex", alignItems: "center", marginRight: 8 }}><IconChevron /></span>
           </div>
         ))}
@@ -513,6 +521,7 @@ function TelaPrescrições({ onBack }) {
     </div>
   );
 }
+     
 
 
 // ── Tela: Favoritos ───────────────────────────────────────────────────────────

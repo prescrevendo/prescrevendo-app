@@ -15,8 +15,9 @@ export const ESPECIALIDADES_PRESCRICOES = [
 ];
 
 export const SECOES_HOME = [
-  { id: "calculadoras", label: "Calculadoras", icon: "🧮", cor: "#1a6b8a", disponivel: false },
-  { id: "escores", label: "Escores / Escalas", icon: "📊", cor: "#7a3b0d", disponivel: false },
-  { id: "protocolos", label: "Protocolos", icon: "📋", cor: "#0d4a5c", disponivel: false },
-  { id: "antimicro", label: "Antimicrobianos", icon: "🦠", cor: "#5c0d2e", disponivel: false },
+  { id: "prescricoes", label: "Prescrições", icon: "📝", cor: "#0d5c4a", disponivel: true },
+  { id: "bulas", label: "Bulas", icon: "💊", cor: "#1a6b8a", disponivel: true },
+  { id: "calculadoras", label: "Calculadoras", icon: "🧮", cor: "#7a3b0d", disponivel: false },
+  { id: "escores", label: "Escores / Escalas", icon: "📊", cor: "#5c4a0d", disponivel: false },
+  { id: "pediatria", label: "Pediatria", icon: "👶", cor: "#4a5c0d", disponivel: false },
 ];

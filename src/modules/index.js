@@ -1,6 +1,6 @@
-export { PrescricoesCardiologia } from "./cardiologia";
-export { PrescricoesEndocrinologia } from "./endocrinologia";
-export { PrescricoesGastroenterologiaHepatologia } from "./gastroenterologia";
-export { PrescricoesHematologia } from "./hematologia";
-export { PrescricoesNefrologia } from "./nefrologia";
-export { PrescricoesNeurologia } from "./neurologia";
+export { default as PrescricoesCardiologia } from "./cardiologia/PrescricoesCardiologia";
+export { default as PrescricoesEndocrinologia } from "./endocrinologia/PrescricoesEndocrinologia";
+export { default as PrescricoesGastroenterologiaHepatologia } from "./gastroenterologia/PrescricoesGastroenterologiaHepatologia";
+export { default as PrescricoesHematologia } from "./hematologia/PrescricoesHematologia";
+export { default as PrescricoesNefrologia } from "./nefrologia/PrescricoesNefrologia";
+export { default as PrescricoesNeurologia } from "./neurologia/PrescricoesNeurologia";

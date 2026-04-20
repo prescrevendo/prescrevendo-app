@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header, FichaModal } from "../components";
 import { COLORS } from "../styles/colors";
+import { SECOES_HOME } from "../constants/especialidades";
 import { useMedicamentos } from "../hooks";
 
 const COR = COLORS;
@@ -47,16 +48,57 @@ export function TelaHome({ onNavegarSecao }) {
           </div>
         </div>
 
-        {/* Se não houver busca */}
+        {/* Se não houver busca - Mostrar atalhos e boas-vindas */}
         {!busca && (
-          <div style={{ textAlign: "center", padding: "60px 20px" }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>💊</div>
-            <h2 style={{ fontSize: 18, color: COR.text, margin: "0 0 8px", fontWeight: 700 }}>
-              Bem-vindo ao Prescrevendo
-            </h2>
-            <p style={{ fontSize: 13, color: COR.muted, margin: 0 }}>
-              Digite o nome de um medicamento para começar
-            </p>
+          <div>
+            <div style={{ textAlign: "center", padding: "30px 20px" }}>
+              <div style={{ fontSize: 48, marginBottom: 12 }}>💊</div>
+              <h2 style={{ fontSize: 18, color: COR.text, margin: "0 0 8px", fontWeight: 700 }}>
+                Bem-vindo ao Prescrevendo
+              </h2>
+              <p style={{ fontSize: 13, color: COR.muted, margin: 0 }}>
+                Escolha uma opção ou digite para buscar
+              </p>
+            </div>
+
+            {/* Grid de Atalhos Rápidos */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
+              {SECOES_HOME.map(secao => (
+                <div
+                  key={secao.id}
+                  onClick={() => onNavegarSecao(secao.id)}
+                  style={{
+                    background: "#fff", borderRadius: 12, padding: "16px 12px",
+                    border: "1.5px solid #eee", cursor: "pointer",
+                    display: "flex", flexDirection: "column", alignItems: "center",
+                    justifyContent: "center", gap: 8,
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                    transition: "all 0.15s",
+                    opacity: secao.disponivel ? 1 : 0.6,
+                    pointerEvents: secao.disponivel ? "auto" : "none",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (secao.disponivel) {
+                      e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.04)";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  <span style={{ fontSize: 28 }}>{secao.icon}</span>
+                  <span style={{
+                    fontSize: 12, fontWeight: 600, color: COR.text,
+                    textAlign: "center", lineHeight: 1.2
+                  }}>{secao.label}</span>
+                  {!secao.disponivel && (
+                    <span style={{ fontSize: 10, color: COR.muted, fontStyle: "italic" }}>Em breve</span>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

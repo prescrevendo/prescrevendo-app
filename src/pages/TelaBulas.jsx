@@ -5,14 +5,14 @@ import { useMedicamentos } from "../hooks";
 
 const COR = COLORS;
 
-export function TelaBulas() {
+export function TelaBulas({ onBack }) {
   const [busca, setBusca] = useState("");
   const [medSelecionado, setMedSelecionado] = useState(null);
   const { resultados, total } = useMedicamentos(busca);
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", minHeight: "100vh", background: COR.bg, paddingBottom: 80 }}>
-      <Header titulo="Bulas" />
+      <Header titulo="Bulas" onBack={onBack} />
       <div style={{ padding: "16px" }}>
         <div style={{
           position: "relative", display: "flex", alignItems: "center",

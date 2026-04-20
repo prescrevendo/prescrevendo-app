@@ -10,7 +10,7 @@ export default function App() {
 
   const renderTela = () => {
     if (aba === "home")        return <TelaHome onNavegarSecao={setAba} />;
-    if (aba === "bulas")       return <TelaBulas />;
+    if (aba === "bulas")       return <TelaBulas onBack={() => setAba("home")} />;
     if (aba === "prescricoes") return <TelaPrescrições onBack={() => setAba("home")} />;
     if (aba === "favoritos")   return <TelaFavoritos />;
     return <TelaHome />;

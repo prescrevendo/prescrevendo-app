@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 
 import PrescricoesCardiologia from "./telas/prescricoes/PrescricoesCardiologia";
 import PrescricoesEndocrinologia from "./telas/prescricoes/PrescricoesEndocrinologia";
-import PrescricoesGastroenterologia from "./telas/prescricoes/PrescricoesGastroenterologiaHepatologia";
+import PrescricoesGastroenterologiaHepatologia from "./telas/prescricoes/PrescricoesGastroenterologiaHepatologia";
 import PrescricoesHematologia from "./telas/prescricoes/PrescricoesHematologia";
 import PrescricoesNefrologia from "./telas/prescricoes/PrescricoesNefrologia";
 import PrescricoesNeurologia from "./telas/prescricoes/PrescricoesNeurologia";

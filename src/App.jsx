@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 
 import PrescricoesCardiologia from "./telas/prescricoes/PrescricoesCardiologia";
-import PrescricoesNeurologia from "./telas/prescricoes/PrescricoesNeurologia"
+
+import PrescricoesNeurologia from "./telas/prescricoes/PrescricoesNeurologia";
 
 const COR = {
   primary:  "#0d5c4a",

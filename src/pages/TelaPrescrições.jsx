@@ -2,12 +2,7 @@ import { useState } from "react";
 import { Header, IconChevron } from "../components";
 import { COLORS } from "../styles/colors";
 import { prescricaoService } from "../services";
-import PrescricoesCardiologia from "../telas/prescricoes/PrescricoesCardiologia";
-import PrescricoesEndocrinologia from "../telas/prescricoes/PrescricoesEndocrinologia";
-import PrescricoesGastroenterologiaHepatologia from "../telas/prescricoes/PrescricoesGastroenterologiaHepatologia";
-import PrescricoesHematologia from "../telas/prescricoes/PrescricoesHematologia";
-import PrescricoesNefrologia from "../telas/prescricoes/PrescricoesNefrologia";
-import PrescricoesNeurologia from "../telas/prescricoes/PrescricoesNeurologia";
+import { PrescricoesCardiologia, PrescricoesEndocrinologia, PrescricoesGastroenterologiaHepatologia, PrescricoesHematologia, PrescricoesNefrologia, PrescricoesNeurologia } from "../modules";
 
 const COR = COLORS;
 

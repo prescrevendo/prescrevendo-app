@@ -442,26 +442,26 @@ function TelaPrescrições({ onBack }) {
   const [sistema, setSistema] = useState(null);
 
   const SISTEMAS_DATA = [
-    ["🚨", "Admitindo Paciente Grave", "#fde8e8"], 
-    ["❤️", "Cardiologia", "#fde8e8"], 
-    ["🩺", "Endocrinologia", "#fef3e2"], 
-    ["🫄", "Gastroenterologia / Hepatologia", "#e8f4ef"], 
-    ["🩸", "Hematologia", "#fde8e8"], 
-    ["💧", "Nefrologia", "#e8f0fd"], 
-    ["🧠", "Neurologia", "#f0e8fd"], 
-    ["🎗️", "Oncologia", "#fde8f4"], 
-    ["🫁", "Pneumologia", "#e8f0fd"], 
-    ["🦴", "Reumatologia", "#fef3e2"], 
-    ["⚠️", "Causas Externas", "#fde8e8"], 
-    ["🏥", "Paciente Crítico", "#e8f4ef"], 
-    ["⭐", "Bônus", "#fef3e2"]
+    { id: "s1", icon: "🚨", nome: "Admitindo Paciente Grave", cor: "#fde8e8" },
+    { id: "s2", icon: "❤️", nome: "Cardiologia", cor: "#fde8e8" },
+    { id: "s3", icon: "🩺", nome: "Endocrinologia", cor: "#fef3e2" },
+    { id: "s4", icon: "🫄", nome: "Gastroenterologia / Hepatologia", cor: "#e8f4ef" },
+    { id: "s5", icon: "🩸", nome: "Hematologia", cor: "#fde8e8" },
+    { id: "s6", icon: "💧", nome: "Nefrologia", cor: "#e8f0fd" },
+    { id: "s7", icon: "🧠", nome: "Neurologia", cor: "#f0e8fd" },
+    { id: "s8", icon: "🎗️", nome: "Oncologia", cor: "#fde8f4" },
+    { id: "s9", icon: "🫁", nome: "Pneumologia", cor: "#e8f0fd" },
+    { id: "s10", icon: "🦴", nome: "Reumatologia", cor: "#fef3e2" },
+    { id: "s11", icon: "⚠️", nome: "Causas Externas", cor: "#fde8e8" },
+    { id: "s12", icon: "🏥", nome: "Paciente Crítico", cor: "#e8f4ef" },
+    { id: "s13", icon: "⭐", nome: "Bônus", cor: "#fef3e2" }
   ];
 
-if (sistema) {
+  if (sistema) {
     // Redirecionamento automático para as telas de cada especialidade
     if (sistema.nome === "Cardiologia") return <PrescricoesCardiologia onBack={() => setSistema(null)} />;
     if (sistema.nome === "Endocrinologia") return <PrescricoesEndocrinologia onBack={() => setSistema(null)} />;
-    if (sistema.nome === "Gastroenterologia / Hepatologia") return <PrescricoesGastroenterologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Gastroenterologia / Hepatologia") return <PrescricoesGastroenterologiaHepatologia onBack={() => setSistema(null)} />;
     if (sistema.nome === "Hematologia") return <PrescricoesHematologia onBack={() => setSistema(null)} />;
     if (sistema.nome === "Nefrologia") return <PrescricoesNefrologia onBack={() => setSistema(null)} />;
     if (sistema.nome === "Neurologia") return <PrescricoesNeurologia onBack={() => setSistema(null)} />;
@@ -521,8 +521,6 @@ if (sistema) {
     </div>
   );
 }
-     
-
 
 // ── Tela: Favoritos ───────────────────────────────────────────────────────────
 function TelaFavoritos() {

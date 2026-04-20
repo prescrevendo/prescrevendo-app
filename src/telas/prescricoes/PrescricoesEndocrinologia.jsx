@@ -22,6 +22,7 @@ function Header({ titulo, subtitulo, onBack }) {
     <div style={{
       background: COR.primary, padding: "14px 16px",
       display: "flex", alignItems: "center", gap: 12,
+      position: "sticky", top: 0, zIndex: 100, boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
     }}>
       <button
         onClick={onBack}
@@ -414,82 +415,74 @@ function GrupoPrescricao({ grupo }) {
 
 // ─── COMPONENTE PRINCIPAL (Endocrinologia) ────────────────────────────────────
 export default function PrescricoesEndocrinologia({ onBack }) {
-  const [temaId, setTemaId]     = useState(TEMAS[0].id);
-  const [aba, setAba]           = useState("orientacoes");
-  const [dropOpen, setDropOpen] = useState(false);
+  const [temaId, setTemaId] = useState(null); // Começa nulo para mostrar a lista
+  const [aba, setAba]       = useState("orientacoes");
 
+  // Se nenhum tema estiver selecionado, mostra a LISTA DE TEMAS
+  if (!temaId) {
+    return (
+      <div style={{ minHeight: "100vh", background: COR.bg, fontFamily: "system-ui, sans-serif" }}>
+        <Header titulo="Endocrinologia" onBack={onBack} />
+        
+        <div style={{ padding: "20px 16px" }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: COR.muted, margin: "0 0 16px 4px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+            Selecione um Tema
+          </p>
+          
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {TEMAS.map(t => (
+              <div 
+                key={t.id} 
+                onClick={() => { setTemaId(t.id); setAba("orientacoes"); }} 
+                style={{
+                  background: COR.card, borderRadius: 16, padding: "18px 20px",
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  border: `1px solid ${COR.border}`, cursor: "pointer",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.02)", transition: "transform 0.1s"
+                }}
+              >
+                <span style={{ fontSize: 15, fontWeight: 700, color: COR.text }}>{t.nome}</span>
+                <span style={{ color: COR.primary, fontSize: 22, fontWeight: 600 }}>›</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Se o utilizador clicou num tema, mostra as ABAS (Orientações / Prescrição)
   const tema = TEMAS.find((t) => t.id === temaId);
-
-  const selecionarTema = (id) => { setTemaId(id); setAba("orientacoes"); setDropOpen(false); };
 
   return (
     <div style={{ minHeight: "100vh", background: COR.bg, fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column" }}>
 
-      <Header titulo="Prescrições" subtitulo="Endocrinologia" onBack={onBack} />
-
-      {/* SELETOR DE TEMA */}
-      <div style={{ background: COR.card, borderBottom: `1px solid ${COR.border}`, padding: "10px 16px" }}>
-        <button
-          onClick={() => setDropOpen(!dropOpen)}
-          style={{
-            width: "100%", padding: "10px 14px",
-            background: COR.bg, border: `1.5px solid ${dropOpen ? COR.primary : COR.border}`,
-            borderRadius: 10, cursor: "pointer",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            color: COR.text, fontSize: 14, fontWeight: 600, transition: "border-color 0.2s",
-          }}
-        >
-          <span>📋 {tema.nome}</span>
-          <span style={{ fontSize: 12, color: COR.muted }}>{dropOpen ? "▲" : "▼"}</span>
-        </button>
-        {dropOpen && (
-          <div style={{
-            marginTop: 6, background: COR.card, border: `1px solid ${COR.border}`,
-            borderRadius: 10, overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-          }}>
-            {TEMAS.map((t) => (
-              <button key={t.id} onClick={() => selecionarTema(t.id)} style={{
-                width: "100%", padding: "12px 14px", textAlign: "left",
-                background: t.id === temaId ? COR.primary3 : "transparent",
-                border: "none", borderBottom: `1px solid ${COR.border}`,
-                cursor: "pointer", color: t.id === temaId ? COR.primary : COR.text,
-                fontSize: 13, fontWeight: t.id === temaId ? 700 : 400,
-              }}>{t.nome}</button>
-            ))}
-          </div>
-        )}
-      </div>
+      {/* O botão "Voltar" agora regressa à lista de temas desta especialidade */}
+      <Header titulo={tema.nome} subtitulo="Endocrinologia" onBack={() => { setTemaId(null); setAba("orientacoes"); }} />
 
       {/* ABAS */}
       <div style={{ display: "flex", background: COR.card, borderBottom: `2px solid ${COR.border}`, padding: "0 16px" }}>
         {[{ id: "orientacoes", label: "Orientações" }, { id: "prescricao", label: "Prescrição Prática" }].map((tab) => (
           <button key={tab.id} onClick={() => setAba(tab.id)} style={{
-            padding: "12px 16px", background: "transparent", border: "none", cursor: "pointer",
-            fontSize: 13, fontWeight: aba === tab.id ? 700 : 400,
+            padding: "16px 16px", background: "transparent", border: "none", cursor: "pointer",
+            fontSize: 14, fontWeight: aba === tab.id ? 700 : 500,
             color: aba === tab.id ? COR.primary : COR.muted,
-            borderBottom: aba === tab.id ? `2px solid ${COR.primary}` : "2px solid transparent",
-            marginBottom: -2, transition: "all 0.15s",
+            borderBottom: aba === tab.id ? `3px solid ${COR.primary}` : "3px solid transparent",
+            marginBottom: -2, transition: "all 0.15s", flex: 1
           }}>{tab.label}</button>
         ))}
       </div>
 
       {/* CONTEÚDO */}
       <div style={{ flex: 1, overflowY: "auto", padding: 16 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 12, fontSize: 11, color: COR.muted }}>
-          <span style={{ color: COR.primary, fontWeight: 700 }}>Endocrinologia</span>
-          <span>›</span>
-          <span style={{ color: COR.text, fontWeight: 600 }}>{tema.nome}</span>
-          <span>›</span>
-          <span style={{ color: COR.primary, fontWeight: 700 }}>{aba === "orientacoes" ? "Orientações" : "Prescrição Prática"}</span>
-        </div>
-
         {aba === "orientacoes" && tema.orientacoes.secoes.map((secao, i) => <Secao key={i} secao={secao} />)}
 
         {aba === "prescricao" && (
           <>
             <div style={{
-              padding: "10px 14px", marginBottom: 12, background: COR.primary3,
-              borderRadius: 10, border: `1px solid #C0D8C4`, fontSize: 12, color: COR.primary, fontWeight: 600,
+              padding: "12px 16px", marginBottom: 16, background: COR.primary3,
+              borderRadius: 12, border: `1px solid #C0D8C4`, fontSize: 13, color: COR.primary, fontWeight: 600,
+              lineHeight: 1.4
             }}>
               🩺 Prescrições orientadoras — adapte ao protocolo da sua instituição.
             </div>

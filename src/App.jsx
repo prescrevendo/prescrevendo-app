@@ -1,6 +1,8 @@
 import { useState, useMemo } from "react";
 
 import PrescricoesCardiologia from "./telas/prescricoes/PrescricoesCardiologia";
+import PrescricoesEndocrinologia from "./telas/prescricoes/PrescricoesEndocrinologia";
+import PrescricoesNeurologia from "./telas/prescricoes/PrescricoesNeurologia";
 
 const COR = {
   primary:  "#0d5c4a",
@@ -456,7 +458,41 @@ function TelaPrescrições({ onBack }) {
     if (sistema[1] === "Cardiologia") {
       return <PrescricoesCardiologia onBack={() => setSistema(null)} />;
     }
+// 2. NOVA CONDIÇÃO: Endocrinologia
+    if (sistema[1] === "Endocrinologia") {
+      return <PrescricoesEndocrinologia onBack={() => setSistema(null)} />;
+    }
 
+    // 3. NOVA CONDIÇÃO: Neurologia
+    if (sistema[1] === "Neurologia") {
+      return <PrescricoesNeurologia onBack={() => setSistema(null)} />;
+    }
+
+    // TELA PADRÃO (Em breve) - O que não cair nos 'ifs' acima, cai aqui:
+    return (
+      <div style={{ minHeight: "100vh", background: "#f4f6f8", fontFamily: "system-ui, sans-serif" }}>
+        <Header titulo={sistema[1]} onBack={() => setSistema(null)} />
+        <div style={{ padding: "16px" }}>
+          <div style={{
+            background: "#fff", borderRadius: 16, border: "1px solid #f1f5f9",
+            padding: "40px 24px", textAlign: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.02)"
+          }}>
+            <div style={{
+              width: 72, height: 72, background: sistema[2], borderRadius: 20,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 36, margin: "0 auto 20px"
+            }}>{sistema[0]}</div>
+            <p style={{ fontSize: 18, fontWeight: 700, color: "#1a1a1a", marginBottom: 8 }}>{sistema[1]}</p>
+            <p style={{ fontSize: 13, color: "#888", margin: 0 }}>O conteúdo desta especialidade estará disponível em breve.</p>
+            <button 
+              onClick={() => setSistema(null)} 
+              style={{ marginTop: 24, padding: "10px 24px", borderRadius: 8, border: "none", background: "#f1f5f9", color: "#1a1a1a", fontWeight: 600, cursor: "pointer" }}
+            >Voltar</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
     return (
       <div style={{ minHeight: "100vh", background: "#f4f6f8", fontFamily: "system-ui, sans-serif" }}>
         <Header titulo={sistema[1]} onBack={() => setSistema(null)} />

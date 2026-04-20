@@ -1,0 +1,93 @@
+import { useState } from "react";
+import { Header, IconChevron } from "../components";
+import { COLORS } from "../styles/colors";
+import PrescricoesCardiologia from "../telas/prescricoes/PrescricoesCardiologia";
+import PrescricoesEndocrinologia from "../telas/prescricoes/PrescricoesEndocrinologia";
+import PrescricoesGastroenterologiaHepatologia from "../telas/prescricoes/PrescricoesGastroenterologiaHepatologia";
+import PrescricoesHematologia from "../telas/prescricoes/PrescricoesHematologia";
+import PrescricoesNefrologia from "../telas/prescricoes/PrescricoesNefrologia";
+import PrescricoesNeurologia from "../telas/prescricoes/PrescricoesNeurologia";
+
+const COR = COLORS;
+
+export function TelaPrescrições({ onBack }) {
+  const [sistema, setSistema] = useState(null);
+
+  const SISTEMAS_DATA = [
+    { id: "s1", icon: "🚨", nome: "Admitindo Paciente Grave", cor: "#fde8e8" },
+    { id: "s2", icon: "❤️", nome: "Cardiologia", cor: "#fde8e8" },
+    { id: "s3", icon: "🩺", nome: "Endocrinologia", cor: "#fef3e2" },
+    { id: "s4", icon: "🫄", nome: "Gastroenterologia / Hepatologia", cor: "#e8f4ef" },
+    { id: "s5", icon: "🩸", nome: "Hematologia", cor: "#fde8e8" },
+    { id: "s6", icon: "💧", nome: "Nefrologia", cor: "#e8f0fd" },
+    { id: "s7", icon: "🧠", nome: "Neurologia", cor: "#f0e8fd" },
+    { id: "s8", icon: "🎗️", nome: "Oncologia", cor: "#fde8f4" },
+    { id: "s9", icon: "🫁", nome: "Pneumologia", cor: "#e8f0fd" },
+    { id: "s10", icon: "🦴", nome: "Reumatologia", cor: "#fef3e2" },
+    { id: "s11", icon: "⚠️", nome: "Causas Externas", cor: "#fde8e8" },
+    { id: "s12", icon: "🏥", nome: "Paciente Crítico", cor: "#e8f4ef" },
+    { id: "s13", icon: "⭐", nome: "Bônus", cor: "#fef3e2" }
+  ];
+
+  if (sistema) {
+    if (sistema.nome === "Cardiologia") return <PrescricoesCardiologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Endocrinologia") return <PrescricoesEndocrinologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Gastroenterologia / Hepatologia") return <PrescricoesGastroenterologiaHepatologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Hematologia") return <PrescricoesHematologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Nefrologia") return <PrescricoesNefrologia onBack={() => setSistema(null)} />;
+    if (sistema.nome === "Neurologia") return <PrescricoesNeurologia onBack={() => setSistema(null)} />;
+
+    return (
+      <div style={{ minHeight: "100vh", background: "#f4f6f8", fontFamily: "system-ui, sans-serif" }}>
+        <Header titulo={sistema.nome} onBack={() => setSistema(null)} />
+        <div style={{ padding: "16px" }}>
+          <div style={{
+            background: "#fff", borderRadius: 16, border: "1px solid #f1f5f9",
+            padding: "40px 24px", textAlign: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.02)"
+          }}>
+            <div style={{
+              width: 72, height: 72, background: sistema.cor, borderRadius: 20,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 36, margin: "0 auto 20px"
+            }}>{sistema.icon}</div>
+            <p style={{ fontSize: 18, fontWeight: 700, color: "#1a1a1a", marginBottom: 8 }}>{sistema.nome}</p>
+            <p style={{ fontSize: 13, color: "#888", margin: 0 }}>O conteúdo desta especialidade estará disponível em breve.</p>
+            <button 
+              onClick={() => setSistema(null)} 
+              style={{ marginTop: 24, padding: "10px 24px", borderRadius: 8, border: "none", background: "#f1f5f9", color: "#1a1a1a", fontWeight: 600, cursor: "pointer" }}
+            >Voltar</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#f4f6f8", fontFamily: "system-ui, sans-serif", paddingBottom: 80 }}>
+      <Header titulo="Prescrições" onBack={onBack} />
+      <div style={{ padding: "16px" }}>
+        {SISTEMAS_DATA.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => setSistema(item)}
+            style={{
+              background: "#ffffff", borderRadius: "16px", padding: "12px",
+              marginBottom: "12px", display: "flex", alignItems: "center", gap: "16px",
+              border: "1px solid #f1f5f9", cursor: "pointer",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.02)"
+            }}
+          >
+            <div style={{
+              width: 56, height: 56, borderRadius: 14, backgroundColor: item.cor,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 26, flexShrink: 0
+            }}>{item.icon}</div>
+            
+            <span style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a", flex: 1, lineHeight: "1.2" }}>{item.nome}</span>
+            <span style={{ display: "flex", alignItems: "center", marginRight: 8 }}><IconChevron /></span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

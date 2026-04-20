@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header, IconChevron } from "../components";
 import { COLORS } from "../styles/colors";
+import { prescricaoService } from "../services";
 import PrescricoesCardiologia from "../telas/prescricoes/PrescricoesCardiologia";
 import PrescricoesEndocrinologia from "../telas/prescricoes/PrescricoesEndocrinologia";
 import PrescricoesGastroenterologiaHepatologia from "../telas/prescricoes/PrescricoesGastroenterologiaHepatologia";
@@ -12,22 +13,7 @@ const COR = COLORS;
 
 export function TelaPrescrições({ onBack }) {
   const [sistema, setSistema] = useState(null);
-
-  const SISTEMAS_DATA = [
-    { id: "s1", icon: "🚨", nome: "Admitindo Paciente Grave", cor: "#fde8e8" },
-    { id: "s2", icon: "❤️", nome: "Cardiologia", cor: "#fde8e8" },
-    { id: "s3", icon: "🩺", nome: "Endocrinologia", cor: "#fef3e2" },
-    { id: "s4", icon: "🫄", nome: "Gastroenterologia / Hepatologia", cor: "#e8f4ef" },
-    { id: "s5", icon: "🩸", nome: "Hematologia", cor: "#fde8e8" },
-    { id: "s6", icon: "💧", nome: "Nefrologia", cor: "#e8f0fd" },
-    { id: "s7", icon: "🧠", nome: "Neurologia", cor: "#f0e8fd" },
-    { id: "s8", icon: "🎗️", nome: "Oncologia", cor: "#fde8f4" },
-    { id: "s9", icon: "🫁", nome: "Pneumologia", cor: "#e8f0fd" },
-    { id: "s10", icon: "🦴", nome: "Reumatologia", cor: "#fef3e2" },
-    { id: "s11", icon: "⚠️", nome: "Causas Externas", cor: "#fde8e8" },
-    { id: "s12", icon: "🏥", nome: "Paciente Crítico", cor: "#e8f4ef" },
-    { id: "s13", icon: "⭐", nome: "Bônus", cor: "#fef3e2" }
-  ];
+  const SISTEMAS_DATA = prescricaoService.obterEspecialidades();
 
   if (sistema) {
     if (sistema.nome === "Cardiologia") return <PrescricoesCardiologia onBack={() => setSistema(null)} />;

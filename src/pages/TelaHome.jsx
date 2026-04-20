@@ -1,22 +1,14 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Header, FichaModal } from "../components";
 import { COLORS } from "../styles/colors";
-import { MEDICAMENTOS } from "../constants/medicamentos";
+import { useMedicamentos } from "../hooks";
 
 const COR = COLORS;
 
 export function TelaHome({ onNavegarSecao }) {
   const [busca, setBusca] = useState("");
   const [medSelecionado, setMedSelecionado] = useState(null);
-
-  const resultados = useMemo(() => {
-    const q = busca.toLowerCase().trim();
-    if (!q) return [];
-    return MEDICAMENTOS.filter(m =>
-      m.nome?.toLowerCase().includes(q) ||
-      m.classe_terapeutica?.toLowerCase().includes(q)
-    ).slice(0, 8);
-  }, [busca]);
+  const { resultados, total } = useMedicamentos(busca, 8);
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif" }}>
@@ -72,7 +64,7 @@ export function TelaHome({ onNavegarSecao }) {
         {busca && resultados.length > 0 && (
           <div>
             <p style={{ fontSize: 11, color: COR.muted, margin: "0 0 10px", fontWeight: 700, textTransform: "uppercase" }}>
-              {resultados.length} resultado{resultados.length !== 1 ? "s" : ""}
+              {total} resultado{total !== 1 ? "s" : ""}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {resultados.map(med => (

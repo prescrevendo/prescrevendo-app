@@ -15,7 +15,7 @@ export function Header({ titulo, onBack, cor = "#0d5c4a" }) {
       ) : (
         <img src="/icon-192.png" alt="Logo" style={{ width: 30, height: 30, borderRadius: 7, objectFit: "contain", background: "#fff" }} />
       )}
-      <span style={{ color: "#fff", fontWeight: 700, fontSize: 16, letterSpacing: "-0.2px" }}>
+      <span style={{ ...TEXT_STYLES.heading, color: "#fff", letterSpacing: "-0.2px" }}>
         {titulo}
       </span>
     </div>

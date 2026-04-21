@@ -413,7 +413,7 @@ function Secao({ secao }) {
                   alignItems: "flex-start",
                 }}>
                   <span style={{ flexShrink: 0, width: 6, height: 6, borderRadius: "50%", background: COR.primary2, marginTop: 6 }} />
-                  <span style={{ fontSize: 13, color: COR.text, lineHeight: 1.5 }}>{item}</span>
+                  <span style={ ...TEXT_STYLES.body }}>{item}</span>
                 </li>
               ))}
             </ul>
@@ -447,7 +447,7 @@ function GrupoPrescricao({ grupo }) {
               display: "flex", alignItems: "center", justifyContent: "center",
               color: i % 2 === 0 ? "#fff" : COR.primary, fontWeight: 800, fontSize: 11,
             }}>{i + 1}</div>
-            <span style={{ fontSize: 13, color: COR.text, lineHeight: 1.5, paddingTop: 2 }}>{item}</span>
+            <span style={ ...TEXT_STYLES.body }}>{item}</span>
           </div>
         ))}
         {grupo.nota && (

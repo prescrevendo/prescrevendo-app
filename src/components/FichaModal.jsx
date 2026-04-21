@@ -1,4 +1,5 @@
 import { CAMPOS_MEDICAMENTO } from "../constants/medicamentos";
+import { TEXT_STYLES } from "../../constants/styles";
 import { COLORS } from "../styles/colors";
 
 const COR = COLORS;

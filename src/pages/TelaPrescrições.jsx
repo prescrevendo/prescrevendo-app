@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { TEXT_STYLES } from "../../constants/styles";
 import { Header, IconChevron } from "../components";
 import { COLORS } from "../styles/colors";
 import { prescricaoService } from "../services";

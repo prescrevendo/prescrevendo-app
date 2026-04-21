@@ -1,4 +1,5 @@
 import { Header } from "../components";
+import { TEXT_STYLES } from "../../constants/styles";
 
 export function TelaFavoritos() {
   return (

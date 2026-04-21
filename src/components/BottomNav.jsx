@@ -1,4 +1,5 @@
 import { NAV_ITEMS } from "../constants/navigation";
+import { TEXT_STYLES } from "../../constants/styles";
 import { COLORS } from "../styles/colors";
 
 const COR = COLORS;

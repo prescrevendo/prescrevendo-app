@@ -1,4 +1,5 @@
 import { IconArrowLeft } from "./IconArrowLeft";
+import { TEXT_STYLES } from "../../constants/styles";
 
 export function Header({ titulo, onBack, cor = "#0d5c4a" }) {
   return (

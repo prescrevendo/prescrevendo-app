@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { COLORS } from "../constants/colors";
 import { TEXT_STYLES } from "../../../constants/styles";
 
 // ─── CORES — mesmas do App.jsx ────────────────────────────────────────────────

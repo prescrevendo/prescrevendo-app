@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TEXT_STYLES } from "../../constants/styles";
+import { TEXT_STYLES } from "../constants/styles";
 import { Header, FichaModal } from "../components";
 import { COLORS } from "../styles/colors";
 import { SECOES_HOME } from "../constants/especialidades";

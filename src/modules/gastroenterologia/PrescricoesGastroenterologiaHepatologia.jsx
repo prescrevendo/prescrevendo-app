@@ -3,14 +3,14 @@ import { TEXT_STYLES } from "../../constants/styles";
 
 // ─── CORES — mesmas do App.jsx ────────────────────────────────────────────────
 const COR = {
-  bg:       "#F5F7F5",
+  bg:       "#f4f6f8",
   card:     "#FFFFFF",
-  border:   "#DDE3DC",
-  text:     "#1A2B1A",
-  muted:    "#6B7C6B",
-  primary:  "#1F5C2E",
-  primary2: "#2E7A42",
-  primary3: "#E8F2EA",
+  border:   "#eee",
+  text:     "#1a1a1a",
+  muted:    "#888",
+  primary:  "#0d5c4a",
+  primary2: "#0a4a3b",
+  primary3: "#e8f4ef",
   danger:   "#C0392B",
   warn:     "#B45309",
   info:     "#1D5FA8",
